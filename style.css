@@ -1,0 +1,535 @@
+/* ================================================================
+   Ziad Hassan — Infrastructure Engineer Portfolio
+   Terminal aesthetic, content-first
+   ================================================================ */
+
+:root {
+    --bg-primary: #300a24;
+    --bg-secondary: #2c001e;
+    --bg-terminal: #0d0d0d;
+    --text-primary: #d0cfcc;
+    --text-secondary: #8a8a8a;
+
+    --green-bright: #26a269;
+    --green-light: #33d17a;
+    --green-glow: #4af497;
+    --cyan: #2aa1b3;
+    --cyan-bright: #33c7de;
+    --cyan-glow: #5ff4ff;
+    --yellow: #e5a50a;
+    --orange: #e95420;
+    --blue: #3584e4;
+    --white: #ffffff;
+
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-mono);
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(145, 65, 172, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(233, 84, 32, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+/* ── Terminal Window ───────────────────────────── */
+
+.terminal {
+    width: 100%;
+    max-width: 920px;
+    background: var(--bg-terminal);
+    border-radius: 16px;
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    animation: terminalBoot 0.8s var(--ease-out-expo);
+}
+
+@keyframes terminalBoot {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.terminal-header {
+    background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+}
+
+.terminal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.terminal-buttons { display: flex; gap: 8px; }
+.terminal-buttons .btn {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.btn.close    { background: linear-gradient(135deg, #ff6b6b, #ff5f56); }
+.btn.minimize { background: linear-gradient(135deg, #ffd93d, #ffbd2e); }
+.btn.maximize { background: linear-gradient(135deg, #6bcb77, #27c93f); }
+
+.terminal-title {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    position: absolute;
+    left: 0; right: 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.terminal-body {
+    padding: 24px;
+    position: relative;
+}
+
+/* ── ASCII Banner ──────────────────────────────── */
+
+.ascii-banner {
+    margin: 0 auto 28px auto;
+    padding: 20px 24px;
+    width: fit-content;
+    max-width: 100%;
+    text-align: center;
+    border: 2px solid var(--green-bright);
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(38, 162, 105, 0.3);
+    animation: bannerGlow 3s ease-in-out infinite alternate;
+    overflow-x: auto;
+}
+
+.ascii-banner pre {
+    color: var(--green-bright);
+    font-size: 0.55rem;
+    line-height: 1.2;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(74, 244, 151, 0.4);
+    white-space: pre;
+    font-family: var(--font-mono);
+}
+
+.banner-subtitle {
+    display: block;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(38, 162, 105, 0.3);
+    color: var(--cyan-bright);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(42, 161, 179, 0.4);
+}
+
+@keyframes bannerGlow {
+    from {
+        box-shadow: 0 0 10px rgba(38, 162, 105, 0.2);
+        border-color: var(--green-bright);
+    }
+    to {
+        box-shadow: 0 0 25px rgba(74, 244, 151, 0.5), 0 0 50px rgba(38, 162, 105, 0.2);
+        border-color: var(--green-glow);
+    }
+}
+
+/* ── Command Blocks ────────────────────────────── */
+
+.command-block {
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: commandReveal 0.6s var(--ease-out-expo) forwards;
+}
+
+.command-block:nth-of-type(1) { animation-delay: 0.1s; }
+.command-block:nth-of-type(2) { animation-delay: 0.2s; }
+.command-block:nth-of-type(3) { animation-delay: 0.3s; }
+.command-block:nth-of-type(4) { animation-delay: 0.4s; }
+.command-block:nth-of-type(5) { animation-delay: 0.5s; }
+.command-block:nth-of-type(6) { animation-delay: 0.6s; }
+.command-block:nth-of-type(7) { animation-delay: 0.7s; }
+
+@keyframes commandReveal {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Prompt ────────────────────────────────────── */
+
+.prompt {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.user { color: var(--green-bright); font-weight: 700; }
+.host { color: var(--cyan); font-weight: 700; }
+.path { color: var(--blue); font-weight: 700; }
+.cmd  { color: var(--white); }
+
+/* ── Output Base ───────────────────────────────── */
+
+.output {
+    padding-left: 0;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+}
+
+/* ── whoami ─────────────────────────────────────── */
+
+.whoami-output {
+    padding: 8px 0;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+/* ── Skills (printenv) ─────────────────────────── */
+
+.skills-output {
+    padding: 8px 0;
+    font-size: 0.82rem;
+    line-height: 1.9;
+}
+
+.skill-key {
+    color: var(--yellow);
+    font-weight: 700;
+}
+
+.skill-val {
+    color: var(--text-primary);
+}
+
+/* ── ls -la Projects ───────────────────────────── */
+
+.ls-output {
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+}
+
+.ls-total {
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.ls-row {
+    display: grid;
+    grid-template-columns: 10ch 6ch 5ch 12ch 1fr;
+    gap: 0 1ch;
+    padding: 4px 0;
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+    margin-left: -8px;
+    transition: all 0.25s var(--ease-out-expo);
+    cursor: default;
+}
+
+.ls-row:hover {
+    border-left-color: var(--cyan-bright);
+    background: rgba(42, 161, 179, 0.06);
+}
+
+.ls-perms { color: var(--text-secondary); }
+.ls-owner { color: var(--yellow); }
+.ls-size  { color: var(--text-secondary); text-align: right; }
+.ls-date  { color: var(--text-secondary); }
+
+.ls-name a {
+    color: var(--cyan-bright);
+    text-decoration: none;
+    font-weight: 700;
+}
+.ls-name a:hover {
+    color: var(--cyan-glow);
+    text-shadow: 0 0 8px rgba(42, 161, 179, 0.4);
+}
+.ls-name a::after { content: "/"; color: var(--text-secondary); font-weight: 400; }
+
+.ls-name-private {
+    color: var(--green-light);
+    font-weight: 700;
+}
+.ls-name-private::after { content: "/"; color: var(--text-secondary); font-weight: 400; }
+
+.ls-desc {
+    grid-column: 1 / -1;
+    padding: 4px 0 6px 11ch;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.ls-row:hover .ls-desc {
+    opacity: 1;
+}
+
+/* Permission bit coloring */
+.perm-r    { color: var(--yellow); }
+.perm-w    { color: var(--orange); }
+.perm-x    { color: var(--green-bright); }
+.perm-d    { color: var(--blue); }
+.perm-dash { color: #444; }
+
+/* ── Publication ───────────────────────────────── */
+
+.pub-output {
+    padding: 8px 0 8px 16px;
+    border-left: 3px solid var(--green-bright);
+    margin-bottom: 8px;
+}
+
+.pub-title {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.pub-venue {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    margin-top: 2px;
+}
+
+.pub-desc {
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* ── Status / Contract ─────────────────────────── */
+
+.status-output {
+    padding: 8px 0;
+    font-size: 0.82rem;
+    line-height: 1.9;
+}
+
+.status-label {
+    color: var(--green-light);
+    font-weight: 700;
+}
+
+.status-indent {
+    padding-left: 11ch;
+    color: var(--text-primary);
+}
+
+/* ── Contact ───────────────────────────────────── */
+
+.contact-output {
+    padding: 8px 0;
+    font-size: 0.9rem;
+}
+
+/* ── Links ─────────────────────────────────────── */
+
+.link {
+    color: var(--cyan);
+    text-decoration: none;
+    position: relative;
+    transition: all 0.25s var(--ease-out-expo);
+    padding: 2px 0;
+}
+
+.link::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--cyan-glow);
+    transition: width 0.3s var(--ease-out-expo);
+}
+
+.link:hover {
+    color: var(--cyan-glow);
+}
+
+.link:hover::after {
+    width: 100%;
+}
+
+.link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--cyan-glow);
+    border-radius: 2px;
+}
+
+/* ── Cursor ────────────────────────────────────── */
+
+.cursor {
+    color: var(--green-glow);
+    text-shadow: 0 0 10px var(--green-bright);
+    animation: cursorBlink 1s step-end infinite;
+    display: inline-block;
+    width: 10px;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+}
+
+.final-prompt {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.auto-type {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    vertical-align: bottom;
+    color: var(--white);
+    animation: typeContact 8s infinite;
+}
+
+@keyframes typeContact {
+    0%   { width: 0;    animation-timing-function: steps(15, end); }
+    19%  { width: 15ch; animation-timing-function: step-end; }
+    66%  { width: 15ch; animation-timing-function: steps(15, end); }
+    80%  { width: 0;    animation-timing-function: step-end; }
+    100% { width: 0; }
+}
+
+.auto-result {
+    opacity: 0;
+    color: var(--text-secondary);
+    padding-left: 2ch;
+    margin-top: 2px;
+    user-select: all;
+    animation: showEmail 8s infinite;
+}
+
+@keyframes showEmail {
+    0%, 22%  { opacity: 0; }
+    25%      { opacity: 0.9; }
+    62%      { opacity: 0.9; }
+    66%      { opacity: 0; }
+    100%     { opacity: 0; }
+}
+
+
+/* ── Footer ────────────────────────────────────── */
+
+.footer {
+    margin-top: 28px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    text-align: center;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.footer:hover { opacity: 1; }
+
+/* ── Responsive ────────────────────────────────── */
+
+@media (max-width: 768px) {
+    body { padding: 0.5rem; }
+
+    .terminal {
+        border-radius: 8px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .terminal-body {
+        padding: 12px;
+        overflow-x: hidden;
+    }
+
+    .ascii-banner {
+        overflow-x: auto;
+        max-width: 100%;
+        padding-bottom: 8px;
+    }
+
+    .ascii-banner pre { font-size: 0.35rem; }
+
+    .output {
+        font-size: 0.85rem;
+        word-break: break-word;
+    }
+
+    .ls-row {
+        grid-template-columns: 1fr;
+        padding: 8px 0;
+        padding-left: 8px;
+    }
+
+    .ls-perms, .ls-owner, .ls-size, .ls-date { display: none; }
+    .ls-total { display: none; }
+
+    .ls-desc {
+        padding-left: 0 !important;
+        max-height: none;
+        opacity: 0.7;
+    }
+
+    .ls-row:hover .ls-desc {
+        padding-left: 0 !important;
+    }
+
+    .status-indent {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .ascii-banner { display: none; }
+
+    .terminal-header { padding: 8px 12px; }
+    .terminal-title { font-size: 0.75rem; }
+
+    .command-block {
+        animation: none;
+        opacity: 1;
+        margin-bottom: 16px;
+    }
+}
+
+/* ── Selection & Scrollbar ─────────────────────── */
+
+::selection {
+    background: var(--green-bright);
+    color: #000;
+    text-shadow: none;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* ── Print ─────────────────────────────────────── */
+
+@media print {
+    body { background: white; color: black; }
+    .terminal { box-shadow: none; border: 1px solid #ccc; }
+}
